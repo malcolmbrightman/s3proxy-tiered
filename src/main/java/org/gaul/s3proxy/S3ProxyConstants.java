@@ -117,6 +117,16 @@ public final class S3ProxyConstants {
     public static final String PROPERTY_STORAGE_CLASS_BLOBSTORE =
             "s3proxy.storage-class-blobstore";
 
+    /** Tiered storage configuration for hot backend. */
+    public static final String PROPERTY_TIERED_BLOBSTORE_HOT =
+            "s3proxy.tiered-blobstore.hot";
+    /** Tiered storage configuration for cold backend. */
+    public static final String PROPERTY_TIERED_BLOBSTORE_COLD =
+            "s3proxy.tiered-blobstore.cold";
+    /** Days before objects move from hot to cold storage. */
+    public static final String PROPERTY_TIERED_AGE_DAYS =
+            "s3proxy.tiered-blobstore.age-days";
+
     /** Maximum time skew allowed in signed requests. */
     public static final String PROPERTY_MAXIMUM_TIME_SKEW =
             "s3proxy.maximum-timeskew";

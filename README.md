@@ -114,6 +114,20 @@ S3Proxy can modify its behavior based on middlewares:
 * [sharded backend containers](https://github.com/gaul/s3proxy/wiki/Middleware-sharded-backend)
 * [storage class override](https://github.com/gaul/s3proxy/wiki/Middleware-storage-class-override)
 * [user metadata replacer](https://github.com/gaul/s3proxy/wiki/Middleware-user-metadata-replacer)
+* [tiered backend](https://github.com/gaul/s3proxy/wiki/Middleware-tiered)
+
+Example tiered configuration:
+
+```
+# optional override for hot backend
+s3proxy.tiered-blobstore.hot.provider=transient
+
+s3proxy.tiered-blobstore.cold.provider=filesystem
+s3proxy.tiered-blobstore.cold.identity=identity
+s3proxy.tiered-blobstore.cold.credential=credential
+s3proxy.tiered-blobstore.cold.filesystem.basedir=/tmp/s3proxy-cold
+s3proxy.tiered-blobstore.age-days=30
+```
 
 ## SSL Support
 

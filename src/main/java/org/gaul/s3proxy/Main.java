@@ -307,6 +307,34 @@ public final class Main {
                             blobStore, fromChars, toChars);
         }
 
+        Properties hotProps = new Properties();
+        Properties coldProps = new Properties();
+        for (var entry : properties.entrySet()) {
+            String key = (String) entry.getKey();
+            if (key.startsWith(S3ProxyConstants.PROPERTY_TIERED_BLOBSTORE_HOT + ".")) {
+                hotProps.put(key.substring(
+                        S3ProxyConstants.PROPERTY_TIERED_BLOBSTORE_HOT.length() + 1),
+                        entry.getValue());
+            }
+            if (key.startsWith(S3ProxyConstants.PROPERTY_TIERED_BLOBSTORE_COLD + ".")) {
+                coldProps.put(key.substring(
+                        S3ProxyConstants.PROPERTY_TIERED_BLOBSTORE_COLD.length() + 1),
+                        entry.getValue());
+            }
+        }
+        if (!coldProps.isEmpty()) {
+            if (!hotProps.isEmpty()) {
+                blobStore = createBlobStore(hotProps, executorService);
+            }
+            BlobStore coldBlobStore = createBlobStore(coldProps, executorService);
+            int ageDays = Integer.parseInt(properties.getProperty(
+                    S3ProxyConstants.PROPERTY_TIERED_AGE_DAYS, "30"));
+            blobStore = TieredBlobStore.newTieredBlobStore(blobStore,
+                    coldBlobStore, Executors.newScheduledThreadPool(1), ageDays);
+            System.err.println("Using tiered storage backend with age " + ageDays +
+                    " days");
+        }
+
         return blobStore;
     }
 
